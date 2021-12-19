@@ -101,17 +101,26 @@ def get_top_10_cities_by_average_rating(coll: Collection) -> List:
     Returns:
         List: List of Mongo DB Documents
     """
-
-    # TODO : implement - Task 3
-    pipeline = []
-
-    results = coll.aggregate(pipeline)
+    results = coll.aggregate(
+        [
+            {
+                "$group": {
+                    "_id": "$address.market",
+                    "ratingMean": {"$avg": "$review_scores.review_scores_rating"},
+                    "ratingStdDev": {"$stdDevPop": "$review_scores.review_scores_rating"},
+                    "popSize": {"$sum": 1},
+                }
+            },
+            {"$sort": {"ratingMean": -1}},
+            {"$limit": 10},
+        ]
+    )
     return results
 
 
 def main():
     # Increment as you work through the tasks and implement the required methods
-    task_index = 2  # 1,2,3
+    task_index = 3  # 1,2,3
 
     client = get_mongo_client()
     listings_reviews_collection = get_listings_reviews_collection(client)
