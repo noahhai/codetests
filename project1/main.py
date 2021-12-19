@@ -62,11 +62,13 @@ def get_most_reviewed_listing(coll: Collection) -> List:
     Returns:
         List: List of Mongo DB Documents
     """
-
-    # TODO : implement - Task 2
-    pipeline = []
-
-    results = coll.aggregate(pipeline)
+    results = coll.aggregate(
+        [
+            {"$project": {"_id": 1, "name": 1, "reviewCount": {"$size": "$reviews"}}},
+            {"$sort": {"reviewCount": -1}},
+            {"$limit": 1},
+        ]
+    )
     return list(results)
 
 
