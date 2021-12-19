@@ -10,7 +10,7 @@ from pymongo import DESCENDING, MongoClient
 from pymongo.collection import Collection
 from tabulate import tabulate
 
-MONGO_HOST = ""  # TODO : Implement - Task 1
+MONGO_HOST = "cluster0.ruule.mongodb.net"
 MONGO_USER = "readonly"
 MONGO_PASS = "thycoticcentrify"
 MONGO_DB = "sample_airbnb"
@@ -23,10 +23,9 @@ def get_mongo_client() -> MongoClient:
     Returns:
         MongoClient: Mongo DB Client
     """
-
-    # TODO : Implement - Task 1
-
-    pass
+    connectionStr = f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}"
+    c = MongoClient(connectionStr)
+    return c
 
 
 def get_listings_reviews_collection(client: MongoClient) -> Collection:
@@ -39,8 +38,7 @@ def get_listings_reviews_collection(client: MongoClient) -> Collection:
     Returns:
         Collection: Mongo DB Collection
     """
-
-    # TODO : Implement - Task 1
+    return client[MONGO_DB].get_collection(MONGO_COLLECTION)
 
 
 def get_first_record(coll: Collection) -> dict:
@@ -111,7 +109,7 @@ def get_top_10_cities_by_average_rating(coll: Collection) -> List:
 
 def main():
     # Increment as you work through the tasks and implement the required methods
-    task_index = 1  # 1,2,3
+    task_index = 2  # 1,2,3
 
     client = get_mongo_client()
     listings_reviews_collection = get_listings_reviews_collection(client)
